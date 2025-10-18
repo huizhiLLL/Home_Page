@@ -7,6 +7,12 @@ on:
     - cron: '0 0 * * *'
   # 允许手动触发
   workflow_dispatch:
+  # 新增：当有推送事件时触发
+  push:
+    branches: ['*']
+  # 新增：当有拉取请求事件时触发
+  pull_request:
+    branches: ['*']
 
 # 添加作业权限
 permissions:
