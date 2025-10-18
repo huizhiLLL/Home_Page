@@ -8,15 +8,17 @@ on:
   # 允许手动触发
   workflow_dispatch:
 
+# 添加作业权限
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1. 检出代码库
+      # 1. 检出代码库 - 移除persist-credentials: false
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          persist-credentials: false
 
       # 2. 设置Python环境
       - name: Set up Python
@@ -46,7 +48,7 @@ jobs:
           git add index.html background.jpg
           git commit -m 'Automated daily build: Update static website' || echo "No changes to commit"
 
-      # 7. 推送更改到仓库
+      # 7. 推送更改到仓库 - 更新为最新版本的push action
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
