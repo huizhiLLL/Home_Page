@@ -28,7 +28,7 @@ try:
     spec.loader.exec_module(app_module)
     
     # 确保generate_static_html函数存在
-    if hasattr(app_module, 'generate_static_html'):
+    if hasattr(app_module, 'generate_static_html') and False:
             # 调用generate_static_html函数生成静态文件
             success = app_module.generate_static_html(static_dir=static_dir)
             
