@@ -43,7 +43,7 @@ jobs:
       # 6. 添加并提交更改
       - name: Commit changes
         run: |
-          git add index.html background.jpg 1background.jpg
+          git add index.html background.jpg
           git commit -m 'Automated daily build: Update static website' || echo "No changes to commit"
 
       # 7. 推送更改到仓库
