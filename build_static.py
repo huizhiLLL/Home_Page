@@ -83,14 +83,23 @@ for file in ['background.jpg', '1background.jpg']:
     
     if os.path.exists(src):
         dst = os.path.join(static_dir, file)
-        # 确认是否已有该资源文件，如果有则备份
-        if os.path.exists(dst):
-            backup_path = f"{dst}.bak"
-            shutil.copy(dst, backup_path)
-            print(f"已备份现有资源文件到: {backup_path}")
         
-        shutil.copy(src, dst)
-        print(f"已复制资源文件: {file}")
+        # 检查源文件和目标文件是否为同一个文件
+        try:
+            # 首先确认是否已有该资源文件，如果有则备份
+            if os.path.exists(dst):
+                backup_path = f"{dst}.bak"
+                shutil.copy(dst, backup_path)
+                print(f"已备份现有资源文件到: {backup_path}")
+            
+            # 检查是否为同一个文件
+            if not os.path.samefile(src, dst):
+                shutil.copy(src, dst)
+                print(f"已复制资源文件: {file}")
+            else:
+                print(f"源文件和目标文件是同一个文件，跳过复制: {file}")
+        except shutil.SameFileError:
+            print(f"源文件和目标文件是同一个文件，跳过复制: {file}")
 
 print("\n静态文件构建完成！")
 print(f"\n静态HTML文件已生成在项目根目录: {os.path.join(static_dir, 'index.html')}")
