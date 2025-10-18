@@ -2,6 +2,9 @@
 
 一个基于 Flask 的现代化个人主页应用，可展示您的 GitHub 个人信息、项目和技术栈，并支持多种部署方式。
 
+<img width="1280" height="700" alt="image" src="https://github.com/user-attachments/assets/7d394bbd-c4ed-4398-a551-104237f90c4e" />
+
+
 ## 🚀 功能特点
 
 - ✨ **美观界面设计**：采用二次元+科技+渐变风格，支持自适应深色/浅色模式切换
@@ -35,8 +38,8 @@
 
 ```bash
 # 克隆仓库到本地
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/SRInternet/Home_Page.git
+cd Home_Page
 ```
 
 ### 2. 安装依赖
@@ -104,7 +107,7 @@ python build_static.py
 
 # 添加生成的文件并提交
 
-git add index.html background.jpg 1background.jpg
+git add index.html background.jpg
 
 git commit -m 'Update static website'
 
@@ -144,13 +147,13 @@ bash deploy.sh help
 
 ## 🤖 自动编译配置
 
-项目已配置 GitHub Actions 自动编译功能，主要特点：
+项目支持配置 GitHub Actions 自动编译功能，主要特点：
 
 - 每天 UTC 时间 0 点（北京时间 8 点）自动运行编译脚本
 - 自动将生成的静态文件提交到当前分支
 - 支持在 GitHub 仓库的 Actions 页面手动触发运行
 
-GitHub Actions 配置文件位于 `.github/workflows/build-deploy.yml`
+GitHub Actions 配置文件可参考[个人项目主页](https://github.com/SRInternet/SRInternet.github.io/blob/master/.github/workflows/build-deploy.yml)
 
 ## ⚙️ 配置详解
 
@@ -171,8 +174,6 @@ GitHub Actions 配置文件位于 `.github/workflows/build-deploy.yml`
 - **添加新功能**：修改 `app.py` 文件中的 Flask 路由和逻辑
 - **调整前端交互**：编辑 `templates/index.html` 中的 JavaScript 代码或 `index.js` 文件
 - **自定义主题**：在 `config.json` 中调整主题颜色配置
-
-如果您对我的项目感兴趣或者有任何问题，可以通过 GitHub 联系我。
 
 ## 📝 License
 
