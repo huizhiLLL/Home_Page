@@ -7,6 +7,7 @@ import os
 import sys
 import shutil
 import importlib.util
+import json  # 导入json模块
 
 # 设置工作目录
 here = os.path.dirname(os.path.abspath(__file__))
@@ -17,6 +18,17 @@ static_dir = here
 print(f"将在项目根目录 {static_dir} 生成静态文件")
 
 print("正在准备生成静态文件...")
+
+# 读取config.json配置文件
+config_path = os.path.join(here, 'config.json')
+if os.path.exists(config_path):
+    with open(config_path, 'r', encoding='utf-8') as f:
+        config = json.load(f)
+    # 从配置中获取背景图片文件名
+    background_image = config.get('background', {}).get('image', 'background.jpg')
+else:
+    print("警告：未找到config.json文件，使用默认背景图片")
+    background_image = 'background.jpg'
 
 # 导入app.py并使用Flask测试客户端
 try:
@@ -65,7 +77,7 @@ except Exception as e:
 
 # 复制其他必要的静态资源到根目录
 print("正在复制其他静态资源...")
-for file in ['background.jpg']:
+for file in [background_image]:  # 使用从配置中读取的背景图片文件名
     src = os.path.join(here, 'static_build', file)
     if not os.path.exists(src):
         # 如果在static_build目录中找不到，则尝试在当前目录查找
@@ -99,7 +111,7 @@ print("1. 确保您已经在项目根目录")
 print("2. 添加并提交所有文件")
 print("3. 将文件推送到GitHub仓库的gh-pages分支")
 print("\n手动部署示例命令：")
-print("git add index.html background.jpg")
+print(f"git add index.html {background_image}")  # 使用从配置中读取的背景图片文件名
 print("git commit -m 'Deploy to GitHub Pages'")
 print("git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git")
 print("git push origin master:gh-pages")
