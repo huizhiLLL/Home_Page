@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 自定义静态文件构建脚本
-这个脚本将直接调用app.py中的功能来生成静态HTML文件
+这个脚本将直接使用Flask测试客户端来生成静态HTML文件
 """
 import os
 import sys
@@ -19,7 +18,7 @@ print(f"将在项目根目录 {static_dir} 生成静态文件")
 
 print("正在准备生成静态文件...")
 
-# 导入app.py并调用其中的generate_static_html函数
+# 导入app.py并使用Flask测试客户端
 try:
     # 动态导入app.py
     spec = importlib.util.spec_from_file_location("app", os.path.join(here, "app.py"))
@@ -27,45 +26,36 @@ try:
     sys.modules["app"] = app_module
     spec.loader.exec_module(app_module)
     
-    # 确保generate_static_html函数存在
-    if hasattr(app_module, 'generate_static_html') and False:
-            # 调用generate_static_html函数生成静态文件
-            success = app_module.generate_static_html(static_dir=static_dir)
-            
-            if not success:
-                print("错误：生成静态文件失败")
-                sys.exit(1)
-    else:
-        print("错误：app.py中未找到generate_static_html函数")
+    # 直接使用Flask测试客户端方法（根据用户反馈，generate_static_html函数有问题）
+    if hasattr(app_module, 'app'):
+        print("使用Flask测试客户端获取页面内容...")
         
-        # 尝试备选方案：使用Flask测试客户端
-        if hasattr(app_module, 'app'):
-            print("尝试使用Flask测试客户端获取页面内容...")
+        # 使用Flask测试客户端
+        client = app_module.app.test_client()
+        response = client.get('/')
+        
+        if response.status_code == 200:
+            # 保存HTML内容到根目录
+            html_path = os.path.join(static_dir, 'index.html')
             
-            # 使用Flask测试客户端
-            client = app_module.app.test_client()
-            response = client.get('/')
-            
-            if response.status_code == 200:
-                # 保存HTML内容到根目录
-                html_path = os.path.join(static_dir, 'index.html')
-                
-                # 确认是否已有index.html文件，如果有则备份
-                if os.path.exists(html_path):
-                    backup_path = os.path.join(static_dir, 'index.html.bak')
+            # 确认是否已有index.html文件，如果有则备份
+            if os.path.exists(html_path):
+                backup_path = os.path.join(static_dir, 'index.html.bak')
+                # 检查源文件和目标文件是否相同
+                if os.path.normpath(html_path) != os.path.normpath(backup_path):
                     shutil.copy(html_path, backup_path)
                     print(f"已备份现有index.html文件到: {backup_path}")
-                
-                with open(html_path, 'wb') as f:
-                    f.write(response.data)
-                
-                print(f"静态HTML文件已保存到项目根目录: {html_path}")
-            else:
-                print(f"错误：无法获取首页内容，状态码: {response.status_code}")
-                sys.exit(1)
+            
+            with open(html_path, 'wb') as f:
+                f.write(response.data)
+            
+            print(f"静态HTML文件已保存到项目根目录: {html_path}")
         else:
-            print("错误：app.py中既未找到generate_static_html函数，也未找到app实例")
+            print(f"错误：无法获取首页内容，状态码: {response.status_code}")
             sys.exit(1)
+    else:
+        print("错误：app.py中未找到app实例")
+        sys.exit(1)
 
 except Exception as e:
     print(f"错误：生成静态文件时出现异常: {e}")
@@ -83,11 +73,18 @@ for file in ['background.jpg', '1background.jpg']:
     
     if os.path.exists(src):
         dst = os.path.join(static_dir, file)
+        # 检查源文件和目标文件是否相同
+        if os.path.normpath(src) == os.path.normpath(dst):
+            print(f"跳过复制 {file}：源文件和目标文件是同一个文件")
+            continue
+        
         # 确认是否已有该资源文件，如果有则备份
         if os.path.exists(dst):
             backup_path = f"{dst}.bak"
-            shutil.copy(dst, backup_path)
-            print(f"已备份现有资源文件到: {backup_path}")
+            # 检查源文件和目标文件是否相同
+            if os.path.normpath(dst) != os.path.normpath(backup_path):
+                shutil.copy(dst, backup_path)
+                print(f"已备份现有资源文件到: {backup_path}")
         
         shutil.copy(src, dst)
         print(f"已复制资源文件: {file}")
