@@ -38,8 +38,8 @@
 
 ```bash
 # 克隆仓库到本地
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/SRInternet/Home_Page.git
+cd Home_Page
 ```
 
 ### 2. 安装依赖
@@ -107,7 +107,7 @@ python build_static.py
 
 # 添加生成的文件并提交
 
-git add index.html background.jpg 1background.jpg
+git add index.html background.jpg
 
 git commit -m 'Update static website'
 
