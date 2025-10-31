@@ -11,7 +11,6 @@
 - Python
 - JavaScript
 - HTML/CSS
-- Flask
 - Vue.js
 - React
 
